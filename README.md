@@ -1,7 +1,5 @@
 # Resend CLI
 
-![resend-cli](nabla_font_generator/output.png)
-
 A command-line interface for interacting with the Resend API. This tool allows users to manage emails, domains, API keys, and other resources through the Resend service from the command line.
 
 ## Features
