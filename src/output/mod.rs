@@ -33,7 +33,7 @@ where
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tabled::{Tabled};
+    use tabled::Tabled;
 
     #[derive(Tabled, Debug, PartialEq)]
     struct TestItem {
@@ -46,8 +46,14 @@ mod tests {
     #[test]
     fn test_print_table_with_items() {
         let items = vec![
-            TestItem { id: 1, name: "Item 1".to_string() },
-            TestItem { id: 2, name: "Item 2".to_string() },
+            TestItem {
+                id: 1,
+                name: "Item 1".to_string(),
+            },
+            TestItem {
+                id: 2,
+                name: "Item 2".to_string(),
+            },
         ];
 
         // Capture stdout would be complex, so we just ensure the function runs without error

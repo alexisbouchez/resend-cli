@@ -43,7 +43,7 @@ impl ContactPropertiesCommand {
                 property_type,
                 fallback_value,
             } => {
-                let fallback = fallback_value.map(|v| serde_json::Value::String(v));
+                let fallback = fallback_value.map(serde_json::Value::String);
                 let request = CreateContactPropertyRequest {
                     key,
                     property_type,
@@ -62,7 +62,7 @@ impl ContactPropertiesCommand {
                 println!("{:#?}", property);
             }
             ContactPropertiesSubcommand::Update { id, fallback_value } => {
-                let fallback = fallback_value.map(|v| serde_json::Value::String(v));
+                let fallback = fallback_value.map(serde_json::Value::String);
                 let request = UpdateContactPropertyRequest {
                     fallback_value: fallback,
                 };

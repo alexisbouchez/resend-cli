@@ -95,14 +95,11 @@ enum Commands {
 async fn main() -> Result<()> {
     let cli = Cli::parse();
 
-    match cli.command {
-        Commands::Config { api_key } => {
-            let config = Config { api_key };
-            config.save()?;
-            println!("Configuration saved successfully!");
-            return Ok(());
-        }
-        _ => {}
+    if let Commands::Config { api_key } = cli.command {
+        let config = Config { api_key };
+        config.save()?;
+        println!("Configuration saved successfully!");
+        return Ok(());
     }
 
     let config = Config::load()?;

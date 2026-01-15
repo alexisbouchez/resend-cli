@@ -126,19 +126,21 @@ impl BroadcastsCommand {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::api::{MockResendApi, PaginationOptions};
     use crate::api::broadcasts::{Broadcast, ListBroadcastsResponse};
+    use crate::api::{MockResendApi, PaginationOptions};
 
     #[tokio::test]
     async fn test_create_broadcast() {
         let mut mock = MockResendApi::new();
-        mock.expect_create_broadcast().returning(|_| Ok(Broadcast {
-            id: "b_123".to_string(),
-            name: Some("Test".to_string()),
-            status: "draft".to_string(),
-            created_at: "now".to_string(),
-            segment_id: Some("s_123".to_string()),
-        }));
+        mock.expect_create_broadcast().returning(|_| {
+            Ok(Broadcast {
+                id: "b_123".to_string(),
+                name: Some("Test".to_string()),
+                status: "draft".to_string(),
+                created_at: "now".to_string(),
+                segment_id: Some("s_123".to_string()),
+            })
+        });
 
         let cmd = BroadcastsCommand {
             command: BroadcastsSubcommand::Create {
@@ -156,22 +158,31 @@ mod tests {
     #[tokio::test]
     async fn test_list_broadcasts() {
         let mut mock = MockResendApi::new();
-        mock.expect_list_broadcasts().returning(|_| Ok(ListBroadcastsResponse { data: vec![] }));
-        let cmd = BroadcastsCommand { command: BroadcastsSubcommand::List(PaginationOptions::default()) };
+        mock.expect_list_broadcasts()
+            .returning(|_| Ok(ListBroadcastsResponse { data: vec![] }));
+        let cmd = BroadcastsCommand {
+            command: BroadcastsSubcommand::List(PaginationOptions::default()),
+        };
         assert!(cmd.execute(mock).await.is_ok());
     }
 
     #[tokio::test]
     async fn test_get_broadcast() {
         let mut mock = MockResendApi::new();
-        mock.expect_get_broadcast().returning(|_| Ok(Broadcast {
-            id: "b_123".to_string(),
-            name: None,
-            status: "sent".to_string(),
-            created_at: "now".to_string(),
-            segment_id: None,
-        }));
-        let cmd = BroadcastsCommand { command: BroadcastsSubcommand::Get { id: "b_123".to_string() } };
+        mock.expect_get_broadcast().returning(|_| {
+            Ok(Broadcast {
+                id: "b_123".to_string(),
+                name: None,
+                status: "sent".to_string(),
+                created_at: "now".to_string(),
+                segment_id: None,
+            })
+        });
+        let cmd = BroadcastsCommand {
+            command: BroadcastsSubcommand::Get {
+                id: "b_123".to_string(),
+            },
+        };
         assert!(cmd.execute(mock).await.is_ok());
     }
 
@@ -179,7 +190,11 @@ mod tests {
     async fn test_delete_broadcast() {
         let mut mock = MockResendApi::new();
         mock.expect_delete_broadcast().returning(|_| Ok(()));
-        let cmd = BroadcastsCommand { command: BroadcastsSubcommand::Delete { id: "b_123".to_string() } };
+        let cmd = BroadcastsCommand {
+            command: BroadcastsSubcommand::Delete {
+                id: "b_123".to_string(),
+            },
+        };
         assert!(cmd.execute(mock).await.is_ok());
     }
 
@@ -187,7 +202,11 @@ mod tests {
     async fn test_send_broadcast() {
         let mut mock = MockResendApi::new();
         mock.expect_send_broadcast().returning(|_| Ok(()));
-        let cmd = BroadcastsCommand { command: BroadcastsSubcommand::Send { id: "b_123".to_string() } };
+        let cmd = BroadcastsCommand {
+            command: BroadcastsSubcommand::Send {
+                id: "b_123".to_string(),
+            },
+        };
         assert!(cmd.execute(mock).await.is_ok());
     }
 }

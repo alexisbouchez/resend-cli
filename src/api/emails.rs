@@ -67,7 +67,7 @@ pub struct Email {
 }
 
 /// Helper function to display vector values in tables
-fn display_vec(v: &Vec<String>) -> String {
+fn display_vec(v: &[String]) -> String {
     v.join(", ")
 }
 

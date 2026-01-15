@@ -110,9 +110,17 @@ impl ContactsCommand {
                     contact_id, segment_id
                 );
             }
-            ContactsSubcommand::RemoveFromSegment { contact_id, segment_id } => {
-                client.delete_contact_from_segment(&contact_id, &segment_id).await?;
-                println!("Contact {} removed from segment {} successfully!", contact_id, segment_id);
+            ContactsSubcommand::RemoveFromSegment {
+                contact_id,
+                segment_id,
+            } => {
+                client
+                    .delete_contact_from_segment(&contact_id, &segment_id)
+                    .await?;
+                println!(
+                    "Contact {} removed from segment {} successfully!",
+                    contact_id, segment_id
+                );
             }
         }
         Ok(())
@@ -122,15 +130,15 @@ impl ContactsCommand {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::api::{MockResendApi, PaginationOptions};
     use crate::api::contacts::{Contact, ListContactsResponse};
+    use crate::api::{MockResendApi, PaginationOptions};
 
     #[tokio::test]
     async fn test_list_contacts() {
         let mut mock = MockResendApi::new();
-        
-        mock.expect_list_contacts()
-            .returning(|_| Ok(ListContactsResponse {
+
+        mock.expect_list_contacts().returning(|_| {
+            Ok(ListContactsResponse {
                 data: vec![Contact {
                     id: "con_1".to_string(),
                     email: "test@example.com".to_string(),
@@ -138,8 +146,9 @@ mod tests {
                     last_name: Some("User".to_string()),
                     created_at: "2023-01-01".to_string(),
                     unsubscribed: false,
-                }]
-            }));
+                }],
+            })
+        });
 
         let cmd = ContactsCommand {
             command: ContactsSubcommand::List(PaginationOptions::default()),
