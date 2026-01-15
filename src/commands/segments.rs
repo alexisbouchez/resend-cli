@@ -52,21 +52,22 @@ impl SegmentsCommand {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::api::segments::{ListSegmentsResponse, Segment};
     use crate::api::{MockResendApi, PaginationOptions};
-    use crate::api::segments::{Segment, ListSegmentsResponse};
 
     #[tokio::test]
     async fn test_list_segments() {
         let mut mock = MockResendApi::new();
-        
-        mock.expect_list_segments()
-            .returning(|_| Ok(ListSegmentsResponse {
+
+        mock.expect_list_segments().returning(|_| {
+            Ok(ListSegmentsResponse {
                 data: vec![Segment {
                     id: "seg_1".to_string(),
                     name: "Test Segment".to_string(),
                     created_at: "2023-01-01".to_string(),
-                }]
-            }));
+                }],
+            })
+        });
 
         let cmd = SegmentsCommand {
             command: SegmentsSubcommand::List(PaginationOptions::default()),

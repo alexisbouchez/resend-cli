@@ -64,22 +64,23 @@ impl ApiKeysCommand {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::api::{MockResendApi, PaginationOptions};
     use crate::api::api_keys::{ApiKey, ListApiKeysResponse};
+    use crate::api::{MockResendApi, PaginationOptions};
 
     #[tokio::test]
     async fn test_list_api_keys() {
         let mut mock = MockResendApi::new();
 
-        mock.expect_list_api_keys()
-            .returning(|_| Ok(ListApiKeysResponse {
+        mock.expect_list_api_keys().returning(|_| {
+            Ok(ListApiKeysResponse {
                 data: vec![ApiKey {
                     id: "key_1".to_string(),
                     name: "Test Key".to_string(),
                     created_at: "2023-01-01".to_string(),
                     token: None,
-                }]
-            }));
+                }],
+            })
+        });
 
         let cmd = ApiKeysCommand {
             command: ApiKeysSubcommand::List(PaginationOptions::default()),
@@ -93,13 +94,14 @@ mod tests {
     async fn test_create_api_key() {
         let mut mock = MockResendApi::new();
 
-        mock.expect_create_api_key()
-            .returning(|_| Ok(ApiKey {
+        mock.expect_create_api_key().returning(|_| {
+            Ok(ApiKey {
                 id: "new_key_id".to_string(),
                 name: "New Test Key".to_string(),
                 created_at: "2023-01-01".to_string(),
                 token: Some("test_token_value".to_string()),
-            }));
+            })
+        });
 
         let cmd = ApiKeysCommand {
             command: ApiKeysSubcommand::Create {
@@ -117,8 +119,7 @@ mod tests {
     async fn test_delete_api_key() {
         let mut mock = MockResendApi::new();
 
-        mock.expect_delete_api_key()
-            .returning(|_| Ok(()));
+        mock.expect_delete_api_key().returning(|_| Ok(()));
 
         let cmd = ApiKeysCommand {
             command: ApiKeysSubcommand::Delete {

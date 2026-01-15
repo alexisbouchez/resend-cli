@@ -38,17 +38,17 @@ pub enum DomainsSubcommand {
     /// Get a single domain by its ID
     Get {
         /// ID of the domain to retrieve
-        id: String
+        id: String,
     },
     /// Delete a domain by its ID
     Delete {
         /// ID of the domain to delete
-        id: String
+        id: String,
     },
     /// Verify a domain by its ID
     Verify {
         /// ID of the domain to verify
-        id: String
+        id: String,
     },
 }
 
@@ -104,23 +104,24 @@ impl DomainsCommand {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::api::{MockResendApi, PaginationOptions};
     use crate::api::domains::{Domain, ListDomainsResponse};
+    use crate::api::{MockResendApi, PaginationOptions};
 
     #[tokio::test]
     async fn test_list_domains() {
         let mut mock = MockResendApi::new();
 
-        mock.expect_list_domains()
-            .returning(|_| Ok(ListDomainsResponse {
+        mock.expect_list_domains().returning(|_| {
+            Ok(ListDomainsResponse {
                 data: vec![Domain {
                     id: "dom_1".to_string(),
                     name: "example.com".to_string(),
                     created_at: "2023-01-01".to_string(),
                     status: "verified".to_string(),
                     region: "us-east-1".to_string(),
-                }]
-            }));
+                }],
+            })
+        });
 
         let cmd = DomainsCommand {
             command: DomainsSubcommand::List(PaginationOptions::default()),
@@ -134,14 +135,15 @@ mod tests {
     async fn test_create_domain() {
         let mut mock = MockResendApi::new();
 
-        mock.expect_create_domain()
-            .returning(|_| Ok(Domain {
+        mock.expect_create_domain().returning(|_| {
+            Ok(Domain {
                 id: "new_dom_id".to_string(),
                 name: "newdomain.com".to_string(),
                 created_at: "2023-01-01".to_string(),
                 status: "not_verified".to_string(),
                 region: "us-east-1".to_string(),
-            }));
+            })
+        });
 
         let cmd = DomainsCommand {
             command: DomainsSubcommand::Create {
@@ -158,14 +160,15 @@ mod tests {
     async fn test_get_domain() {
         let mut mock = MockResendApi::new();
 
-        mock.expect_get_domain()
-            .returning(|_| Ok(Domain {
+        mock.expect_get_domain().returning(|_| {
+            Ok(Domain {
                 id: "dom_get_id".to_string(),
                 name: "getdomain.com".to_string(),
                 created_at: "2023-01-01".to_string(),
                 status: "verified".to_string(),
                 region: "eu-west-1".to_string(),
-            }));
+            })
+        });
 
         let cmd = DomainsCommand {
             command: DomainsSubcommand::Get {
@@ -181,8 +184,7 @@ mod tests {
     async fn test_delete_domain() {
         let mut mock = MockResendApi::new();
 
-        mock.expect_delete_domain()
-            .returning(|_| Ok(()));
+        mock.expect_delete_domain().returning(|_| Ok(()));
 
         let cmd = DomainsCommand {
             command: DomainsSubcommand::Delete {
@@ -198,8 +200,7 @@ mod tests {
     async fn test_verify_domain() {
         let mut mock = MockResendApi::new();
 
-        mock.expect_verify_domain()
-            .returning(|_| Ok(()));
+        mock.expect_verify_domain().returning(|_| Ok(()));
 
         let cmd = DomainsCommand {
             command: DomainsSubcommand::Verify {

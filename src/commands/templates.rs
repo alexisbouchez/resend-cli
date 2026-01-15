@@ -70,21 +70,22 @@ impl TemplatesCommand {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::api::templates::{ListTemplatesResponse, Template};
     use crate::api::{MockResendApi, PaginationOptions};
-    use crate::api::templates::{Template, ListTemplatesResponse};
 
     #[tokio::test]
     async fn test_list_templates() {
         let mut mock = MockResendApi::new();
-        
-        mock.expect_list_templates()
-            .returning(|_| Ok(ListTemplatesResponse {
+
+        mock.expect_list_templates().returning(|_| {
+            Ok(ListTemplatesResponse {
                 data: vec![Template {
                     id: "tpl_1".to_string(),
                     name: "Test Template".to_string(),
                     created_at: "2023-01-01".to_string(),
-                }]
-            }));
+                }],
+            })
+        });
 
         let cmd = TemplatesCommand {
             command: TemplatesSubcommand::List(PaginationOptions::default()),

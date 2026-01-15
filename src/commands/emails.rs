@@ -6,8 +6,8 @@
 
 use crate::api::emails::{SendEmailRequest, UpdateEmailRequest};
 use anyhow::Result;
-use clap::{Args, Subcommand};
 use chrono::Utc;
+use clap::{Args, Subcommand};
 
 /// Command structure for email-related operations
 ///
@@ -76,14 +76,14 @@ pub enum EmailsSubcommand {
     /// Retrieve a single email by its ID
     Get {
         /// ID of the email to retrieve
-        id: String
+        id: String,
     },
     /// List sent emails with optional pagination
     List(crate::api::PaginationOptions),
     /// Cancel a scheduled email
     Cancel {
         /// ID of the email to cancel
-        id: String
+        id: String,
     },
     /// Update a scheduled email's delivery time
     Update {
@@ -96,7 +96,7 @@ pub enum EmailsSubcommand {
     /// List attachments for a sent email
     Attachments {
         /// ID of the email to list attachments for
-        id: String
+        id: String,
     },
     /// Send a batch of emails from a JSON file
     SendBatch {
@@ -186,8 +186,16 @@ impl EmailsCommand {
                     from,
                     to,
                     subject,
-                    html: if !html_content.is_empty() { Some(html_content) } else { None },
-                    text: if !text_content.is_empty() { Some(text_content) } else { None },
+                    html: if !html_content.is_empty() {
+                        Some(html_content)
+                    } else {
+                        None
+                    },
+                    text: if !text_content.is_empty() {
+                        Some(text_content)
+                    } else {
+                        None
+                    },
                     cc: None,
                     bcc: None,
                     reply_to: None,
@@ -243,7 +251,9 @@ impl EmailsCommand {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::api::emails::{SendEmailResponse, ListEmailsResponse, Email, ListAttachmentsResponse, Attachment};
+    use crate::api::emails::{
+        Attachment, Email, ListAttachmentsResponse, ListEmailsResponse, SendEmailResponse,
+    };
     use crate::api::{MockResendApi, PaginationOptions};
 
     #[tokio::test]
