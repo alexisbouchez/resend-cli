@@ -107,15 +107,6 @@ pub enum EmailsSubcommand {
 
 use crate::api::ResendApi;
 
-// Helper function to read content from a file
-fn read_file_content(file_path: Option<&String>) -> Result<Option<String>, std::io::Error> {
-    if let Some(path) = file_path {
-        std::fs::read_to_string(path).map(Some)
-    } else {
-        Ok(None)
-    }
-}
-
 impl EmailsCommand {
     /// Executes the email command based on the selected subcommand
     ///
